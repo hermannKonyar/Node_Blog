@@ -3,6 +3,21 @@ const app=express();
 
 app.set("view engine","ejs");
 
+const { Client } = require('pg')
+const client = new Client({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres',
+  password: '12345',
+  port: 5432,
+})
+client.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
+
+
 const path = require('path');
 const userRoutes=require("./routes/user")
 const adminRoutes=require("./routes/admin")
