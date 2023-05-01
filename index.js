@@ -3,22 +3,7 @@ const app=express();
 
 app.set("view engine","ejs");
 
-const { Client } = require('pg')
-const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: '12345',
-  port: 5432,
-})
-client.connect(function(err) {
-  if (err) throw err;
 
-  client.query("select * from blogs",(err,res)=>{
-    console.log(res.rows[0].title);
-  })
-  console.log("Connected!");
-});
 
 
 

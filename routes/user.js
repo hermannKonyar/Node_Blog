@@ -40,6 +40,22 @@ const data = {
     ]
 }
 
+const db = require("../data/db")
+
+async function getUsers() {
+    try {
+      const res = await db.query('SELECT * FROM blogs');
+      return res.rows;
+    } catch (err) {
+      console.error(err);
+    }
+}
+
+
+
+
+
+
 router.use("/blogs/:blogid", function(req, res) {
     res.render("users/blog-details");
 });
@@ -48,8 +64,18 @@ router.use("/blogs", function(req, res) {
     res.render("users/blogs", data);
 });
 
-router.use("/", function(req, res) {
-    res.render("users/index", data);
-});
+router.get('/', async (req, res) => {
+    try {
+      const blogs = await getUsers();
+      res.render('users/index', { blogs });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('An error occurred');
+    }
+  });
+
+// router.use("/", function(req, res) {
+//     res.render("users/index", data);
+// });
 
 module.exports = router;
