@@ -51,6 +51,15 @@ async function getUsers() {
     }
 }
 
+async function getKategoriler() {
+    try {
+      const res = await db.query('SELECT * FROM kategoriler');
+      return res.rows;
+    } catch (err) {
+      console.error(err);
+    }
+}
+
 
 
 
@@ -60,19 +69,31 @@ router.use("/blogs/:blogid", function(req, res) {
     res.render("users/blog-details");
 });
 
-router.use("/blogs", function(req, res) {
-    res.render("users/blogs", data);
+// router.use("/blogs", function(req, res) {
+//     res.render("users/blogs", data);
+// });
+
+router.get('/blogs', async (req, res) => {
+  try {
+    const categories = await getKategoriler();
+    const blogs = await getUsers();
+    res.render('users/index', { categories, blogs });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
 });
 
 router.get('/', async (req, res) => {
-    try {
-      const blogs = await getUsers();
-      res.render('users/index', { blogs });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred');
-    }
-  });
+  try {
+    const categories = await getKategoriler();
+    const blogs = await getUsers();
+    res.render('users/index', { categories, blogs });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
+});
 
 // router.use("/", function(req, res) {
 //     res.render("users/index", data);
