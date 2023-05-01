@@ -13,6 +13,10 @@ const client = new Client({
 })
 client.connect(function(err) {
   if (err) throw err;
+
+  client.query("select * from blogs",(err,res)=>{
+    console.log(res.rows[0].title);
+  })
   console.log("Connected!");
 });
 
